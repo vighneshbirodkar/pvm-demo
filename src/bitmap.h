@@ -61,7 +61,7 @@ void loadBitmapFromFile(const char * str,Bitmap * bmp);
 void newBitmap(Bitmap* bmp,int width,int height);
 void saveBitmap(Bitmap* bmp,const char * str);
 //TODO
-void setPixel(Bitmap *bmp,int x,int y)
+void setPixel(Bitmap *bmp,int x,int y);
 Pixel bitmapGetPixel(Bitmap* bmp,int x,int y);
 
 #endif
