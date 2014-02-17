@@ -8,25 +8,11 @@
 int main()
 {
     Bitmap b;
-    unsigned char c1,c2,c3;
-    int x=3,y=2;
-    int wd;
-    loadBitmapFromFile("/home/vighnesh/bitmaps/demo.bmp",&b);
-    wd = b.width;
-    //x--;
-    //y--;
-    //printf("size = %u",b.infoHeader.biSize);
-    for(x=0;x<5;x++)
-    {
-        for(y=0;y<5;y++)
-        {
-            printf("x = %d y = %d\n",x,y);
-            c1 = b.data[b.rowSize*y+3*x];
-            c2 = b.data[b.rowSize*y+3*x+1];
-            c3 = b.data[b.rowSize*y+3*x+2];
-            printf("%d %d %d \n",c1,c2,c3);
-        }
-    }
-
+    Pixel p;
+    loadBitmapFromFile("/home/vighnesh/bitmaps/nature.bmp",&b);
+    p = bitmapGetPixel(&b,123,100);
+    printf("%d %d %d\n",p.red,p.green,p.blue);
+    saveBitmap(&b,"out.bmp");
+    
     return 0;
 }

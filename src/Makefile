@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall -O3 -g -llibbmp
+CFLAGS=-c -Wall -O3 -g -Wall
 SOURCES=demo.c bitmap.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=demo.out

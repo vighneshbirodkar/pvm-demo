@@ -44,9 +44,24 @@ typedef struct Bitmap
     BitmapFileHeader fileHeader;
     BitmapInfoHeader infoHeader;
     unsigned char *data;
-    int rowSize;
+    unsigned int rowSize;
+    unsigned int dataSize;
 } Bitmap;
 
+typedef struct Pixel 
+{
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+}Pixel;
+
+void setDefaultFileHeader(BitmapFileHeader* h);
+void setDefaultInfoHeader(BitmapInfoHeader* h);
 void loadBitmapFromFile(const char * str,Bitmap * bmp);
+void newBitmap(Bitmap* bmp,int width,int height);
+void saveBitmap(Bitmap* bmp,const char * str);
+//TODO
+void setPixel(Bitmap *bmp,int x,int y)
+Pixel bitmapGetPixel(Bitmap* bmp,int x,int y);
 
 #endif
