@@ -140,5 +140,13 @@ Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
     return p;
 }
 
+void setPixel(Bitmap *bmp,int x,int y,Pixel p)
+{
+    y = bmp->height - y - 1;
+    bmp->data[y*bmp->rowSize + 3*x]=p.blue;
+    bmp->data[y*bmp->rowSize + 3*x + 1]=p.green;
+    bmp->data[y*bmp->rowSize + 3*x +2]=p.red;
+}
+
 
 
