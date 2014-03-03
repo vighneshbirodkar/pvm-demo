@@ -167,7 +167,6 @@ void bitmapToBW(Bitmap *bmp)
             p.blue = (unsigned char)f;
             p.green = (unsigned char)f;
             bitmapSetPixel(bmp,i,j,p);
-            
         }
     }
 }
