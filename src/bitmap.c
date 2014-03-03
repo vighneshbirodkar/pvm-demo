@@ -140,12 +140,36 @@ Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
     return p;
 }
 
-void setPixel(Bitmap *bmp,int x,int y,Pixel p)
+void bitmapSetPixel(Bitmap *bmp,int x,int y,Pixel p)
 {
     y = bmp->height - y - 1;
     bmp->data[y*bmp->rowSize + 3*x]=p.blue;
     bmp->data[y*bmp->rowSize + 3*x + 1]=p.green;
     bmp->data[y*bmp->rowSize + 3*x +2]=p.red;
+}
+
+void bitmapToBW(Bitmap *bmp)
+{
+    float r,g,b,f;
+    Pixel p;
+    int i,j;
+
+    for(i=0;i<bmp->width;i++)
+    {
+        for(j=0;j<bmp->height;j++)
+        {
+            p = bitmapGetPixel(bmp,i,j);
+            r = p.red;
+            g = p.green;
+            b = p.blue;
+            f = r*.29 + g*.59 + b*.11;
+            p.red = (unsigned char)f;
+            p.blue = (unsigned char)f;
+            p.green = (unsigned char)f;
+            bitmapSetPixel(bmp,i,j,p);
+            
+        }
+    }
 }
 
 
