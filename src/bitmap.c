@@ -133,6 +133,18 @@ void saveBitmap(Bitmap* bmp,const char * str)
 Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
 {
     Pixel p;
+    p.red = 0;
+    p.green = 0;
+    p.blue = 0;
+    if( x < 0)
+        return p;
+    if ( y < 0 )
+        return p;
+    if(x >= bmp->width)
+        return p;
+    if(y >= bmp->height)
+        return p;
+
     y = bmp->height - y - 1;
     p.blue = bmp->data[y*bmp->rowSize + 3*x];
     p.green = bmp->data[y*bmp->rowSize + 3*x + 1];
