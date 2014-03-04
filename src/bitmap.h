@@ -55,14 +55,29 @@ typedef struct Pixel
     unsigned char blue;
 }Pixel;
 
+typedef struct Kernel 
+{
+    float *kdata;
+    unsigned int kSize;
+
+} Kernel;
+
 void setDefaultFileHeader(BitmapFileHeader* h);
 void setDefaultInfoHeader(BitmapInfoHeader* h);
 void loadBitmapFromFile(const char * str,Bitmap * bmp);
 void newBitmap(Bitmap* bmp,int width,int height);
 void saveBitmap(Bitmap* bmp,const char * str);
 
-void bitmapSetPixel(Bitmap *bmp,int x,int y,Pixel p);
+void bitmapSetPixel(Bitmap* bmp,int x,int y,Pixel p);
 Pixel bitmapGetPixel(Bitmap* bmp,int x,int y);
-void bitmapToBW(Bitmap *bmp);
+void bitmapToBW(Bitmap* bmp);
+
+void kernelSetValue(Kernel* kr,int x,int y,float value);
+float kernelGetValue(Kernel* kr,int x,int y);
+void newKernel(Kernel* kr,int kSize);
+void kernelPrint(Kernel* kr);
+void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out);
 
 #endif
+
+

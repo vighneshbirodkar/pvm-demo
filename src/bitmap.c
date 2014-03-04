@@ -136,6 +136,7 @@ Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
     p.red = 0;
     p.green = 0;
     p.blue = 0;
+    //printf("%d,%d\n",x,y);
     if( x < 0)
         return p;
     if ( y < 0 )
@@ -144,7 +145,8 @@ Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
         return p;
     if(y >= bmp->height)
         return p;
-
+    //printf("value = %d\n",p.red);
+    
     y = bmp->height - y - 1;
     p.blue = bmp->data[y*bmp->rowSize + 3*x];
     p.green = bmp->data[y*bmp->rowSize + 3*x + 1];
@@ -154,6 +156,16 @@ Pixel bitmapGetPixel(Bitmap* bmp,int x,int y)
 
 void bitmapSetPixel(Bitmap *bmp,int x,int y,Pixel p)
 {
+
+    if( x < 0)
+        return ;
+    if ( y < 0 )
+        return ;
+    if(x >= bmp->width)
+        return ;
+    if(y >= bmp->height)
+        return ;
+
     y = bmp->height - y - 1;
     bmp->data[y*bmp->rowSize + 3*x]=p.blue;
     bmp->data[y*bmp->rowSize + 3*x + 1]=p.green;
@@ -183,5 +195,97 @@ void bitmapToBW(Bitmap *bmp)
     }
 }
 
+void newKernel(Kernel* kr,int kSize)
+{
+    if(kSize%2==0)
+    {
+        printf("kernel should be of odd size");
+        //exit(1);
+    }
+    kr->kSize =  kSize;
+    //printf("rowsize: %d datasize %d\n'",kr->krowSize,kr->kdataSize );
+    kr->kdata = (float*)malloc(kSize*kSize*sizeof(float));
+    bzero(kr->kdata,kSize*kSize*sizeof(float));
+    //printf("in kernel\n");
+}
 
+void kernelSetValue(Kernel* kr,int x,int y,float value)
+{
+    int s = kr->kSize/2;
+    
+    if( (x < -s) || (x > s) || (y < -s) || (y > s) )
+    {
+        return ;
+    }
+    x += s;
+    y += s;
+    kr->kdata[y*kr->kSize + x] = value;
+}
+
+float kernelGetValue(Kernel* kr,int x,int y)
+{
+    float value = 1;
+    int s = kr->kSize/2;
+    
+    if( (x < -s) || (x > s) || (y < -s) || (y > s) )
+    {
+        return 0;
+    }
+    x += s;
+    y += s;
+    value = kr->kdata[x*kr->kSize + y];
+    return value;
+}
+
+void kernelPrint(Kernel* kr)
+{
+    int i,j;
+    int s = kr->kSize/2;
+    for(i= -s; i<=s; i++)
+    {
+        for(j=-s; j<=s; j++)
+        {
+            printf("%f\t",kernelGetValue(kr,i,j));
+        }
+        printf("\n");
+        
+    }
+
+}
+
+void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out)
+{
+    if(bmp->width != out->width)
+        perror("Damn, I cant do that\n");
+    if(bmp->height != out->height)
+        perror("Damn, I cant do that\n");
+    int i,j;
+    int ki,kj;
+    int s = kr->kSize/2;
+    float sumr,sumb,sumg;
+    Pixel pixel;
+    
+    for(i=0;i<bmp->width;i++)
+    {
+        for(j=0;j<bmp->height;j++)
+        {
+            //pixel = bitmapGetPixel(bmp,i,j)
+            sumr = sumg = sumb = 0;
+            for(ki=-s ; ki <=s ; ki++)
+            {
+                for(kj=-s ; kj <=s ; kj++)
+                {
+                    pixel = bitmapGetPixel(bmp,i+ki,j+kj);
+                    sumr += pixel.red*kernelGetValue(kr,ki,kj);
+                    sumg += pixel.green*kernelGetValue(kr,ki,kj);
+                    sumb += pixel.blue*kernelGetValue(kr,ki,kj);
+                }
+            }
+            pixel.red = sumr;
+            pixel.green = sumg;
+            pixel.blue = sumb;
+            bitmapSetPixel(out,i,j,pixel);
+        }
+    }
+}
 

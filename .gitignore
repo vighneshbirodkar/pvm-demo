@@ -16,3 +16,6 @@
 *.exe
 *.out
 *.app
+
+#Bitmaps
+*.bmp
