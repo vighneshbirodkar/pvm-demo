@@ -8,35 +8,20 @@
 int main()
 {
     Bitmap b;
-    Bitmap o;
+    Bitmap o,i1;
     loadBitmapFromFile("/home/esha/git/pvm-demo/lena.bmp",&b);
-    bitmapToBW(&b);
     newBitmap(&o,b.width,b.height);
     Kernel k;
-    int i,j;
-    int size = 11;
-    int size2 = size/2;
+    float sum;
+    int size = 5;
     newKernel(&k,size);
-    float f;
-    /*
-    kernelSetValue(&k,-1,-1,-.125);
-    kernelSetValue(&k,-1,0,-.25);
-    kernelSetValue(&k,-1,1,-.125);
-    kernelSetValue(&k,1,1,.125);
-    kernelSetValue(&k,1,0,.25);
-    kernelSetValue(&k,1,-1,.125);*/
-    
-    f = 1/((float)size*size);
-    for(i=-size2;i<=size2;i++)
-    {
-        for(j=-size2;j<=size2;j++)
-        {
-            kernelSetValue(&k,i,j,f);
-        }
-    }
-    
+    sum = gaussKernel(&k, 4);
+    kernelPrint(&k);
+    normKernel(&k, sum);
+    printf("now do norm with sum %f \n", sum);
     kernelPrint(&k);
     convolve(&b,&k,&o);
     saveBitmap(&o,"out.bmp");
+    
     return 0;
 }

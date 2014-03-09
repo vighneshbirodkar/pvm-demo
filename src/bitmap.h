@@ -1,9 +1,11 @@
 #ifndef __BITMAP_H__
 #define __BITMAP_H__
-
+#define PI 3.1415
+#define E 2.718
 
 #include <stdint.h>
 #include<stdio.h>
+#include<math.h>
 /*
  * Ensure no padding between struct members
  * Necessary to load data into struct from file
@@ -77,7 +79,13 @@ float kernelGetValue(Kernel* kr,int x,int y);
 void newKernel(Kernel* kr,int kSize);
 void kernelPrint(Kernel* kr);
 void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out);
+float gaussKernel(Kernel* kr,int var);
+void normKernel(Kernel* kr, float norm);
 
 #endif
+
+//TODO
+//image division
+
 
 

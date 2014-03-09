@@ -1,4 +1,5 @@
 #include "bitmap.h"
+#include<math.h>
 #include<stdlib.h>
 #include<strings.h>
 
@@ -171,7 +172,7 @@ void bitmapSetPixel(Bitmap *bmp,int x,int y,Pixel p)
     bmp->data[y*bmp->rowSize + 3*x + 1]=p.green;
     bmp->data[y*bmp->rowSize + 3*x +2]=p.red;
 }
-
+//converts rgb image to gray scale
 void bitmapToBW(Bitmap *bmp)
 {
     float r,g,b,f;
@@ -194,7 +195,7 @@ void bitmapToBW(Bitmap *bmp)
         }
     }
 }
-
+//defines a new kernel
 void newKernel(Kernel* kr,int kSize)
 {
     if(kSize%2==0)
@@ -209,6 +210,7 @@ void newKernel(Kernel* kr,int kSize)
     //printf("in kernel\n");
 }
 
+//set a value for a specific position
 void kernelSetValue(Kernel* kr,int x,int y,float value)
 {
     int s = kr->kSize/2;
@@ -221,7 +223,7 @@ void kernelSetValue(Kernel* kr,int x,int y,float value)
     y += s;
     kr->kdata[y*kr->kSize + x] = value;
 }
-
+// get the value of a particular kernel position
 float kernelGetValue(Kernel* kr,int x,int y)
 {
     float value = 1;
@@ -237,6 +239,7 @@ float kernelGetValue(Kernel* kr,int x,int y)
     return value;
 }
 
+//print the kernel values
 void kernelPrint(Kernel* kr)
 {
     int i,j;
@@ -252,7 +255,7 @@ void kernelPrint(Kernel* kr)
     }
 
 }
-
+//perform convolution of bmp image with kernel
 void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out)
 {
     if(bmp->width != out->width)
@@ -287,5 +290,54 @@ void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out)
             bitmapSetPixel(out,i,j,pixel);
         }
     }
+}
+
+//inserts values for kernel using 2D gaussian function  with mean 0,0 and variance = var
+float gaussKernel(Kernel* kr,int var)
+{
+    int i,j;
+    float expi,value, c, sum=0.0,a,b;
+    int s = kr->kSize/2;
+    for(i= -s; i<=s; i++)
+    {
+        for(j=-s; j<=s; j++)
+        {
+            expi = (-((float)(i*i)+(j*j))/(2*var*var));
+            c= exp(expi);
+            value = ((1/(2*PI*var*var))*c);
+            kernelSetValue(kr,i,j,value);
+            sum += value;
+            //printf("i=%d j=%d value=%f \n",i,j,value);
+        }
+        //printf("\n");
+    }
+    //printf("sum=%f\n", sum);
+    return sum;
+}
+
+// does normalisation of kernel values by sum of all kernel values
+void normKernel(Kernel* kr, float norm)
+{
+    int i,j;
+    float a,b;
+    int s = kr->kSize/2;
+    for(i= -s; i<=s; i++)
+    {
+/*        a=kernelGetValue(kr,i,i);*/
+/*        b=a/norm;*/
+/*        kernelSetValue(kr,i,i,b);*/
+        for(j=-s; (j<=s && i!=j); j++)
+        {
+            a=kernelGetValue(kr,i,j);
+            b=a/norm;
+            kernelSetValue(kr,i,j,b);
+        }
+    }
+    for(i= -s; i<=s; i++)
+    {
+        a=kernelGetValue(kr,i,i);
+        b=a/norm;
+        kernelSetValue(kr,i,i,b);
+    }//printf("last\n");
 }
 
