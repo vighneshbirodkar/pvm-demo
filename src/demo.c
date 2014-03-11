@@ -13,7 +13,7 @@ int main()
     newBitmap(&o,b.width,b.height);
     Kernel k;
     float sum;
-    int var;
+    int var, procno =5;
     int size;
     //input the variance of the gaussian
     //size of kernel is fixed to thrice the variance
@@ -34,7 +34,7 @@ int main()
     //printf("now do norm with sum %f \n", sum);
     kernelPrint(&k);
     convolve(&b,&k,&o);
-    saveBitmap(&o,"out.bmp");
-    
+    img_division(&b, procno, size);
+    //saveBitmap(&o,"out.bmp");
     return 0;
 }

@@ -82,6 +82,7 @@ void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out);
 float gaussKernel(Kernel* kr,int var);
 void normKernel(Kernel* kr, float norm);
 
+void img_division(Bitmap* bmp, int procno, int ksize);
 #endif
 
 //TODO

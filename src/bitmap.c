@@ -296,7 +296,7 @@ void convolve(Bitmap* bmp,Kernel* kr,Bitmap* out)
 float gaussKernel(Kernel* kr,int var)
 {
     int i,j;
-    float expi,value, c, sum=0.0,a,b;
+    float expi,value, c, sum=0.0;
     int s = kr->kSize/2;
     for(i= -s; i<=s; i++)
     {
@@ -341,3 +341,38 @@ void normKernel(Kernel* kr, float norm)
     }//printf("last\n");
 }
 
+//img division
+void img_division(Bitmap* bmp, int procno, int ksize)
+{
+     Bitmap i1;
+    int rheight = bmp->height/procno;
+    int rht=0;
+    Pixel p;
+    int i,j=0,m, k;
+    char a[100] ="out";
+    char b[100] = "";
+    char ab[100] = "";
+    for(i=0;i<procno;i++)
+    {
+        newBitmap( &i1,bmp->width,rheight);
+        for(k=0;k<i1.width;k++)
+        {
+            for(j=rht;j<rht+rheight;j++)
+            {
+                m = j - (rht);
+                //printf("m=%d \n",m);
+                p = bitmapGetPixel(bmp,k,j);
+                bitmapSetPixel(&i1,k,m,p);
+             }
+        }
+        //printf("%d \n",j);
+        rht=rht+rheight;
+        //printf("proc no %d \trht %d\n", i, rht);
+        sprintf(ab,"%s%d", a ,i);
+        strcpy(b,ab);
+        strcat(b,".bmp");
+        saveBitmap(&i1,b);
+    }
+}
+//TODO
+//modify img division for the nth proc ie to handle the case img ht% proc no is not 0
