@@ -375,3 +375,5 @@ void img_division(Bitmap* bmp, int procno, int ksize)
     }
 }
 
+//TODO
+//img combining after convolution
