@@ -316,8 +316,7 @@ float gaussKernel(Kernel* kr,int var)
 }
 
 // does normalisation of kernel values by sum of all kernel values
-void normKernel(Kernel* kr, float norm)
-{
+void normKernel(Kernel* kr, float norm){
     int i,j;
     float a,b;
     int s = kr->kSize/2;
@@ -349,15 +348,16 @@ void img_division(Bitmap* bmp, int procno, int ksize)
     int rht=0;
     Pixel p;
     int i,j=0,m, k;
+    int s = ksize/2;
     char a[100] ="out";
     char b[100] = "";
     char ab[100] = "";
     for(i=0;i<procno;i++)
     {
-        newBitmap( &i1,bmp->width,rheight);
+        newBitmap( &i1,bmp->width,rheight+ (2*s));
         for(k=0;k<i1.width;k++)
         {
-            for(j=rht;j<rht+rheight;j++)
+            for(j=rht-s;j<rht+rheight+s;j++)
             {
                 m = j - (rht);
                 //printf("m=%d \n",m);
@@ -374,5 +374,4 @@ void img_division(Bitmap* bmp, int procno, int ksize)
         saveBitmap(&i1,b);
     }
 }
-//TODO
-//modify img division for the nth proc ie to handle the case img ht% proc no is not 0
+
